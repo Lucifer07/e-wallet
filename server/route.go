@@ -7,6 +7,7 @@ import (
 	middleware "github.com/Lucifer07/e-wallet/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func Route(route *gin.Engine, handler RouterOpt) *gin.Engine {
@@ -42,6 +43,7 @@ func Route(route *gin.Engine, handler RouterOpt) *gin.Engine {
 	routerTopup.POST("/bank", handler.historyHandler.TopUpBank)
 	routerTopup.POST("/creditcard", handler.historyHandler.TopUpCC)
 	routerTopup.POST("/paylater", handler.historyHandler.TopUpPaylater)
+	route.GET("/metrics",gin.WrapH(promhttp.Handler()))
 	route.GET("/debug/pprof/", gin.WrapH(http.HandlerFunc(pprof.Index)))
 	route.GET("/debug/pprof/profile", gin.WrapH(http.HandlerFunc(pprof.Profile)))
 	route.GET("/debug/pprof/heap", gin.WrapH(http.HandlerFunc(pprof.Handler("heap").ServeHTTP)))

@@ -11,9 +11,13 @@ import (
 
 	"github.com/Lucifer07/e-wallet/database"
 	"github.com/Lucifer07/e-wallet/server"
+	"github.com/Lucifer07/e-wallet/server/monitoring"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 func main() {
+	prometheus.MustRegister(monitoring.HttpRequestDuration)
+	prometheus.MustRegister(monitoring.HttpRequestTotal)
 	db, err := database.ConnectDB()
 	if err != nil {
 		log.Fatalf("error connecting to DB: %s", err.Error())
@@ -22,7 +26,6 @@ func main() {
 	defer db.Close()
 
 	router := server.Init(db)
-
 	srv := &http.Server{
 		Addr:    ":8080",
 		Handler: router,
