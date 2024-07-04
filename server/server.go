@@ -11,6 +11,7 @@ func NewRouter(handler RouterOpt) *gin.Engine {
 	r.Static("/public/images/", "images/")
 	r.ContextWithFallback = true
 	r.Use(
+		middleware.MiddlewareMonitoring,
 		middleware.Log,
 		gin.Recovery(),
 		middleware.CustomMiddlewareError,
